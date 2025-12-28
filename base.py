@@ -38,7 +38,7 @@ ftrs = (
     ),
 )
 # Shared page template
-page = create_template(
+page = page_template(
     hdrs=hdrs,
     htmlkw=htmlkws,
     bodykw=bodykws,

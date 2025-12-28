@@ -7,7 +7,6 @@ from sanic import Sanic
 from datastar_py import ServerSentEventGenerator as SSE
 from datastar_py.sanic import datastar_response
 
-from nitro.infrastructure.html import Span
 from base import *
 
 app = Sanic(__name__)
@@ -17,7 +16,7 @@ app.static('/static/', './static/')
 @app_template(title="Nitro Datastart")
 def index(request):
     return Div(
-        H1("Nitro Datastart your App", cls="text-4xl font-bold mb-4"),    
+        H1("Nitro Datastart your App", cls="text-4xl font-bold mb-4"),
         Span("Loading...", id="time"),    
         cls="px-8 lg:px-16 xl:px-32 mt-16",
         data_init="@get('/load')"
