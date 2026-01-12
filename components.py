@@ -1,5 +1,5 @@
-from nitro.infrastructure.html import *
-from nitro.infrastructure.html.components import *
+from nitro.html import *
+from nitro.html.components import *
 
 THEMES = [
     ('Claude', 'claude'),
@@ -31,8 +31,9 @@ def Navbar():
             Button(
                 LucideIcon('panel-left'), 
                 type='button', 
-                onclick="document.dispatchEvent(new CustomEvent('basecoat:sidebar'))",
-                cls="mr-auto"
+                on_click="$sidebar_open = !$sidebar_open",
+                cls="mr-auto",
+                variant="ghost",
             ),
             Div(
                 ThemeSelector(),
@@ -44,10 +45,25 @@ def Navbar():
         cls='bg-background sticky inset-x-0 top-0 isolate flex shrink-0 items-center gap-2 border-b z-10'
     )
 
-
 def Sidebar():
     return Aside(
         Nav(
+            Header(
+                A(
+                    Div(
+                        LucideIcon('zap', cls="h-4 w-4"),                        
+                        cls='bg-sidebar-primary text-sidebar-primary-foreground flex aspect-square size-8 items-center justify-center rounded-lg'
+                    ),
+                    Div(
+                        Span('My', Span('Boosted', cls='truncate font-light'),cls='truncate font-bold'),
+                        Span('Application', cls='truncate text-xs font-light'),
+                        cls='grid flex-1 text-left text-sm leading-tight'
+                    ),
+                    href='/',
+                    aria_current='page',
+                    cls='btn-ghost p-2 h-12 w-full justify-start'
+                )
+            ),
             Section(
                 Div(
                     H3('Getting started', id='group-label-content-1'),
@@ -74,12 +90,16 @@ def Sidebar():
                     role='group',
                     aria_labelledby='group-label-content-1'
                 ),
-                cls='scrollbar'
+                cls='scrollbar',            
             ),
-            aria_label='Sidebar navigation'
+
+            aria_label='Sidebar navigation',
+            on_click__outside="if ($resize_is_mobile && $sidebar_open && !evt.target.closest('[data-sidebar-toggle]')) {$sidebar_open = false;}",
         ),
         data_side='left',
         aria_hidden='false',
-        cls='sidebar'
+        data_sidebar_initialized='true',
+        **{'data-attr:aria-hidden': '!$sidebar_open'},
+        signals=Signals(sidebar_open=True),
+        cls='sidebar',        
     )
-

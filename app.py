@@ -7,19 +7,19 @@ from sanic import Sanic
 from datastar_py import ServerSentEventGenerator as SSE
 from datastar_py.sanic import datastar_response
 
-from base import *
+from templates import *
 
-app = Sanic(__name__)
+app = Sanic(__name__,)
 app.static('/static/', './static/')
 
 @app.get("/")
-@app_template(title="Nitro Datastart")
+@template(title="Nitro Datastart")
 def index(request):
     return Div(
         H1("Nitro Datastart your App", cls="text-4xl font-bold mb-4"),
-        Span("Loading...", id="time"),    
+        Div(Span("Loading...", id="time")),
         cls="px-8 lg:px-16 xl:px-32 mt-16",
-        data_init="@get('/load')"
+        data_init="@get('/init')"
     )
 
 
@@ -32,17 +32,17 @@ async def cookie(request, response):
         user_id = uuid4().hex
         response.add_cookie('user_id', user_id)
 
-@app.get("/load")
+@app.get("/init")
 @datastar_response
 async def load(request):
     while True:
-        yield SSE.patch_elements(Span(datetime.now().isoformat(), id="time"))
+        yield SSE.patch_elements(Span(datetime.now().strftime("%H:%M:%S"), id="time"))
         await asyncio.sleep(1)
 
 
 if __name__ == "__main__":
     # while developing
-    app.run(debug=True, auto_reload=True, access_log=False)
+    app.run(debug=True, auto_reload=True, port=8800, access_log=False)
     # else
     # app.run(
     # debug=False,

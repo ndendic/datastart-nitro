@@ -44,7 +44,7 @@ Visit `http://localhost:8000` in your browser.
 ```
 datastart_nitro/
 ├── app.py          # Main Sanic application
-├── base.py         # Base template and utilities
+├── templates.py    # Base template and utilities
 ├── components.py   # Reusable UI components
 ├── static/         # Static assets (CSS, JS)
 └── pyproject.toml  # Project dependencies
